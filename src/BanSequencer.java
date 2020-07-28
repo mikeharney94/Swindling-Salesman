@@ -13,8 +13,9 @@ public class BanSequencer {
 		this.points = points;
 	}
 	
-	public int[] findShortestPath(boolean advanced_logging){
-		int[] currentSequence = getStartSequence();
+	public Sequence findShortestPath(boolean advanced_logging){
+		int[] start_seq = getStartSequence();
+		Sequence currentSequence = new Sequence(start_seq);
 		boolean last_sequence_was_banned = false;
 		int last_ban_index = -1;
 		int chained_banned_sequences_same_index = 0;
@@ -23,36 +24,37 @@ public class BanSequencer {
 		int total_sequences = 0;
 		
 		double shortest_distance = Integer.MAX_VALUE;
-		int[] shortest_sequence = null;
-		while(currentSequence != null && currentSequence[0] == starting_id){
+		Sequence shortest_sequence = null;
+		while(currentSequence != null && currentSequence.getElementAt(0) == starting_id){
 			int skippedIndex = Integer.min(twoDeepBannedIndex(currentSequence), fourDeepBannedIndex(currentSequence));
 			if(skippedIndex == Integer.MAX_VALUE){ //no two deep or four deep ban
 				last_sequence_was_banned = false;
 				if(advanced_logging){
-					printSequence(currentSequence);
+					currentSequence.printSequence();
 				}
-				double sequence_length = measureSequence(currentSequence);
+				double sequence_length = currentSequence.measureSequence(points);
 				sequences_measured++;
 
 				if(sequence_length < shortest_distance){
 					shortest_sequence = currentSequence;
 					shortest_distance = sequence_length;
 				}
-				int[] nextSequence = Sequencer.nextSequence(currentSequence); //simplify
+				int[] nextSequence = Sequencer.nextSequence(currentSequence.getSequence()); //simplify
 				if(nextSequence == null){
 					break;
+				}else{
+					currentSequence = new Sequence(nextSequence);
 				}
-				currentSequence = nextSequence.clone();
 			}else{
 				if(advanced_logging){
 					System.out.println("Banned the following on index " + skippedIndex);
-					printSequence(currentSequence);
+					currentSequence.printSequence();;
 				}
 				if(last_sequence_was_banned && last_ban_index == skippedIndex){
 					chained_banned_sequences_same_index++;
 				}
 				last_sequence_was_banned = true;
-				currentSequence = Sequencer.nextSequenceChangingIndex(currentSequence, skippedIndex).clone();
+				currentSequence = new Sequence(Sequencer.nextSequenceChangingIndex(currentSequence.getSequence(), skippedIndex));
 				banned_encounters++;
 				last_ban_index = skippedIndex;
 			}
@@ -68,12 +70,12 @@ public class BanSequencer {
 		return shortest_sequence;
 	}
 	
-	private int twoDeepBannedIndex(int[] currentSequence){
+	private int twoDeepBannedIndex(Sequence currentSequence){
 		if(twoDeepBans.isEmpty()){
 			return Integer.MAX_VALUE;
 		}
-		for(int i=1;i<currentSequence.length;i++){
-			String banString = currentSequence[i-1] + "_" + currentSequence[i];
+		for(int i=1;i<currentSequence.size();i++){
+			String banString = currentSequence.getElementAt(i-1) + "_" + currentSequence.getElementAt(i);
 			if(twoDeepBans.contains(banString)){
 				return i;
 			}
@@ -81,14 +83,14 @@ public class BanSequencer {
 		return Integer.MAX_VALUE;
 	}
 	
-	private int fourDeepBannedIndex(int[] currentSequence){
-		if(currentSequence.length < 4 || fourDeepBans.isEmpty()){
+	private int fourDeepBannedIndex(Sequence currentSequence){
+		if(currentSequence.size() < 4 || fourDeepBans.isEmpty()){
 			return Integer.MAX_VALUE; 
 		}
-		for(int i=3;i<currentSequence.length;i++){
-			String banString2 = currentSequence[i-1] + "_" + currentSequence[i];
+		for(int i=3;i<currentSequence.size();i++){
+			String banString2 = currentSequence.getElementAt(i-1) + "_" + currentSequence.getElementAt(i);
 			for(int j=1;j<i-1;j++){
-				String banString1 = currentSequence[j-1] + "_" + currentSequence[j];
+				String banString1 = currentSequence.getElementAt(j-1) + "_" + currentSequence.getElementAt(j);
 				HashSet<String> bansForBanstring1 = fourDeepBans.get(banString1);
 				if(bansForBanstring1 != null && bansForBanstring1.contains(banString2)){
 					return i;
@@ -112,20 +114,6 @@ public class BanSequencer {
 			}
 		}
 		return startSequence;
-	}	
-
-	private double measureSequence(int[] sequence){
-		double length = 0;
-		for(int i=1;i<sequence.length;i++){
-			Point p1 = points[sequence[i]];
-			Point p2 = points[sequence[i-1]];
-			length += new Line(p1, p2).getDistance();
-		}
-		//Added because this measurement is a loop, not a line
-		Point p1 = points[sequence[0]];
-		Point p2 = points[sequence[sequence.length-1]];
-		length += new Line(p1, p2).getDistance();
-		return length;
 	}
 	
 	private void translateBans(BanGenerator banGenerator){
@@ -174,13 +162,4 @@ public class BanSequencer {
 		}
 		return n * factorial(n - 1);
 	}
-	
-	private static void printSequence(int[] array){
-		 String output = "{";
-		 for(int i=0;i<array.length;i++){
-			 output += array[i] + ",";
-		 }
-		 output = output.substring(0, output.length()-1) + "}";
-		 System.out.println(output);
-	 }
 }

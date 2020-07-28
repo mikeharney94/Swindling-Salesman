@@ -47,7 +47,7 @@ public class Main {
 		 }*/
 		 
 		 System.out.println("========== Polygons ==========");
-		 for(int i=4;i<5;i++){//3 - 14
+		 for(int i=3;i<14;i++){//3 - 14
 			 System.out.println("======= Points = "+i+" =======");
 			 Point[] test_points = PolygonGenerator.createPolygon(i);
 			 for(Point p : test_points){
@@ -58,7 +58,7 @@ public class Main {
 			 //ban_generator.printData();
 			 
 			 BanSequencer ban_sequencer = new BanSequencer(ban_generator, test_points);
-			 printArray(ban_sequencer.findShortestPath(true));
+			 ban_sequencer.findShortestPath(false).printSequence();
 			 System.out.println();
 		 }
 	 }
