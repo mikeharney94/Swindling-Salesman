@@ -42,6 +42,22 @@ The only exception to this would be if the entire graph was a straight line.
 ![Overlap ban](https://lucidar.me/en/mathematics/files/point-belong-to-line.png)
 
 Like the Convex hull ban, this is a ban for a single line, so while this is a rare case, it can skip (n-2)! sequences per occurance.
+
 ## Origins
+In my first job at Aras, the entire department always ate lunch together at a large square table. In the center of the table were puzzles that us engineers liked to solve. 
+But there was one puzzle that a group of us spent a few days trying to figure out. It was a 19 piece hexagon puzzle, where you had to align the pieces so that each piece aligned with its neighbors.
+
+![Aras Puzzle](https://cdn11.bigcommerce.com/s-aqhrs1x7/images/stencil/325x400/products/1669/3197/TY0118700_hex_3__40233.1494003969.jpg?c=2)
+
+Frustrated with the failed effort, and eager to prove myself I committed to building an algorithm over the weekend to solve it myself.
+
+My plan was to brute force every combination, but what I failed to realize was how many combinations there were. With 19 slots for 19 pieces, there were 19! total combinations, which amounted to over 120 quadrillion. Needless to say, I needed an algorithm.
+
+I found that once you placed a piece, and lined it up with the sides of already placed pieces, you could identify immediately whether it was viable given the existing graph. 
+So in those cases, I skipped to the next sequence where that piece was in a different location. **This strategy of skipping over impossible combinations, brought 120 quadrillion sequences down to approximately 2,000.**
+
+That Monday I entered the office and proudly arranged the correct combination. My bosses, who understood the time complexity before I had, were impressed that I had solved it so quickly.
+
+The traveling salesman problem always fascinated me in college. Once I found a technique that had reduced runtime so significantly, I sought to apply it to other cases. By identifying impossible subsequences in polynomial time, I'm attempting to reduce the runtime of an NP hard problem.
 
 ## Evidence
