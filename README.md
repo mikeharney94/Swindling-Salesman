@@ -43,6 +43,8 @@ The only exception to this would be if the entire graph was a straight line.
 
 Like the Convex hull ban, this is a ban for a single line, so while this is a rare case, it can skip (n-2)! sequences per occurance.
 
+## 4. Ban-based start index
+
 ## Origins
 In my first job at Aras, the entire department always ate lunch together at a large square table. In the center of the table were puzzles that us engineers liked to solve. 
 But there was one puzzle that a group of us spent a few days trying to figure out. It was a 19 piece hexagon puzzle, where you had to align the pieces so that each piece aligned with its neighbors.
@@ -60,4 +62,27 @@ That Monday I entered the office and proudly arranged the correct combination. M
 
 The traveling salesman problem always fascinated me in college. Once I found a technique that had reduced runtime so significantly, I sought to apply it to other cases. By identifying impossible subsequences in polynomial time, I'm attempting to reduce the runtime of an NP hard problem.
 
-## Evidence
+## Evidence and Analysis
+Please open the following Google Excel Doc for reference.
+https://docs.google.com/spreadsheets/d/1kGAK5OOdDs8nV3h_m4gvs-64yd3TgpNaZlVnSx58Zcs/edit?usp=sharing
+
+### Worst Case
+This solution, where sequences are skipped based on potential crossing lines, finds its worst case in Rectilinear Crossing Number graphs. These graphs are researched and verified to be graphs with the minimum number of potential crossing lines given n points.
+
+![RCN](https://mathworld.wolfram.com/images/eps-gif/RectilinearCrossingNumberK_1000.gif)
+
+Consulting the results in the Excel sheet, while there is a massive difference in the number of potential combinations (n-1)! and the number of sequences iterated through, the logarithmic graph unfortunately shows similar growth as the factorial line as n increases. Keep in mind that this is the worst case. Additonally, the growth of 'Chained bans' with n means that 'Ban Clustering' might be a promising solution. Although, given that the number of viable sequences appears to rise exponentially (consult the Excel sheet worst case page), this approach definitively cannot solve every graph in polynomial time.
+
+### Best Case
+The best case for this equation is for a simple Regular Polygon with n points. This is because every line from a point to its non-neighbor violates the **Convex Hull ban case**.
+This means that the only path that is not banned is the true shortest path.
+
+![Regular Polygon](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Complete_graph_K7.svg/200px-Complete_graph_K7.svg.png)
+
+Consulting the results in the Excel sheet, the number of skipped sequences is massive. With only 56 tested sequences where n=13. Logarithmically, the growth of tested sequences stagnates, which is exactly what we want from this solution.
+
+## Areas to Improve - Ban Clustering
+It's been a longstanding suspicion of mine that as n increases, and banned cases become more frequent, bans will follow each other much more frequently. Eventually, the majority of tested sequences will be banned sequences, followed by more banned sequences. The 'Chained Index Bans' chart, especially in the worst-case page, confirms this theory. As n rises, bans followed by bans in the same index become more common. This also means that viable sequences become less common as n grows.
+
+This solution can skip over chunks of bans, but as these chunks become more common, the need to ban chunks of chunks rises. If we are able to reduce the fodder around viable sequences (which appear to make up a smaller percentage as n rises), we can further reduce the sequences tested.
+
