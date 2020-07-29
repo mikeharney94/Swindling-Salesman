@@ -125,4 +125,19 @@ public class RectilinearCrossingNumber {
 		}
 		return null;
 	}
+	
+	public static void outputRCNCases(int start_n, int end_n, boolean printBanData, boolean printSequenceData){
+		System.out.println("========== RCN ==========");
+		 for(int i=start_n;i<=end_n;i++){//3 - 13
+			 System.out.println("======= Points = "+i+" =======");
+			 Point[] test_points = RectilinearCrossingNumber.generateGraph(i);
+			 BanGenerator ban_generator = new BanGenerator(test_points);
+			 if(printBanData){
+				 ban_generator.printData();
+			 }			 
+			 BanSequencer ban_sequencer = new BanSequencer(ban_generator, test_points);
+			 ban_sequencer.findShortestPath(printSequenceData).printSequence();
+			 System.out.println();
+		 }
+	}
 }
