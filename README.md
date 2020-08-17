@@ -43,7 +43,8 @@ The only exception to this would be if the entire graph was a straight line.
 
 Like the Convex hull ban, this is a ban for a single line, so while this is a rare case, it can skip (n-2)! sequences per occurance.
 
-## 4. Ban-based start index
+## 4. Ban-driven start index
+Since the traveling salesman problem is a loop rather than a line, the permutation path of 1-2-3-4-5 is the same as 2-3-4-5-1. This means that you can iterate through n-1 sequences rather than n to test all of the combinations. This raises the question of which point to put first. There is actually a correct answer. The earlier on a ban is encountered in a sequence, the more points are skipped, and the more efficient the ban. Therefore, the point we visit first in all of our sequences should be the point involved in the most bans. I created a function that weighs the ban-involvements of each of the points. Not all bans are created equal, since bans involving two points are skip over more sequences than bans involving four points, and this is taken into account.
 
 ## Origins
 In my first job at Aras, the entire department always ate lunch together at a large square table. In the center of the table were puzzles that us engineers liked to solve. 
