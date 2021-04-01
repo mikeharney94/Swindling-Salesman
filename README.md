@@ -33,7 +33,7 @@ In order for these points to reach the other side,
 they are required to cross this new line. Since this inherently creates a crossing line scenario, this line is also banned.
 
 Since this bans a single line rather than a set of two lines, this ban is much more significant. Each ban skips (n - 1 - indexOfLastInvolvedPoint)! sequences. Since this ban can
-occur with a lower index, given it involves fewer points, the maximum skipped sequences per ban occurance is (n-2)! rather than (n-4)!
+occur with a lower index, given it involves fewer points, the maximum skipped sequences per ban occurrence is (n-2)! rather than (n-4)!
 
 ### 3. Overlap Bans
 This is a simple case where a line that overlaps an existing point cannot be included in the shortest path. If A->B overlaps point C, then A->B->C would be inherently faster.
@@ -41,7 +41,7 @@ The only exception to this would be if the entire graph was a straight line.
 
 ![Overlap ban](https://lucidar.me/en/mathematics/files/point-belong-to-line.png)
 
-Like the Convex hull ban, this is a ban for a single line, so while this is a rare case, it can skip (n-2)! sequences per occurance.
+Like the Convex hull ban, this is a ban for a single line, so while this is a rare case, it can skip (n-2)! sequences per occurrence.
 
 ## 4. Ban-driven start index
 Since the traveling salesman problem is a loop rather than a line, the permutation path of 1-2-3-4-5 is the same as 2-3-4-5-1. This means that you can iterate through n-1 sequences rather than n to test all of the combinations. This raises the question of which point to put first. There is actually a correct answer. The earlier on a ban is encountered in a sequence, the more points are skipped, and the more efficient the ban. Therefore, the point we visit first in all of our sequences should be the point involved in the most bans. I created a function that weighs the ban-involvements of each of the points. Not all bans are created equal, since bans involving two points are skip over more sequences than bans involving four points, and this is taken into account.
@@ -72,7 +72,7 @@ This solution, where sequences are skipped based on potential crossing lines, fi
 
 ![RCN](https://mathworld.wolfram.com/images/eps-gif/RectilinearCrossingNumberK_1000.gif)
 
-Consulting the results in the Excel sheet, while there is a massive difference in the number of potential combinations (n-1)! and the number of sequences iterated through, the logarithmic graph unfortunately shows similar growth as the factorial line as n increases. Keep in mind that this is the worst case. Additonally, the growth of 'Chained bans' with n means that 'Ban Clustering' might be a promising solution. Although, given that the number of viable sequences appears to rise exponentially (consult the Excel sheet worst case page), this approach definitively cannot solve every graph in polynomial time.
+Consulting the results in the Excel sheet, while there is a massive difference in the number of potential combinations (n-1)! and the number of sequences iterated through, the logarithmic graph unfortunately shows similar growth as the factorial line as n increases. Keep in mind that this is the worst case. Additionally, the growth of 'Chained bans' with n means that 'Ban Clustering' might be a promising solution. Although, given that the number of viable sequences appears to rise exponentially (consult the Excel sheet worst case page), this approach definitively cannot solve every graph in polynomial time.
 
 ### Best Case
 The best case for this equation is for a simple Regular Polygon with n points. This is because every line from a point to its non-neighbor violates the **Convex Hull ban case**.
