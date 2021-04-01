@@ -50,7 +50,7 @@ Since the traveling salesman problem is a loop rather than a line, the permutati
 In my first job at Aras, the entire department always ate lunch together at a large square table. In the center of the table were puzzles that us engineers liked to solve. 
 But there was one puzzle that a group of us spent a few days trying to figure out. It was a 19 piece hexagon puzzle, where you had to align the pieces so that each piece aligned with its neighbors.
 
-![Aras Puzzle](https://cdn11.bigcommerce.com/s-aqhrs1x7/images/stencil/325x400/products/1669/3197/TY0118700_hex_3__40233.1494003969.jpg?c=2)
+<img src="https://shop.houseofmarbles.com/wp-content/uploads/2020/03/222035-Marble-Tile-Puzzle-Solution-COWG-scaled.jpg" width="300" height="300">
 
 Frustrated with the failed effort, and eager to prove myself I committed to building an algorithm over the weekend to solve it myself.
 
